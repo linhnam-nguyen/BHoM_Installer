@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Fragment>
 
     <WixVariable Id="WixUILicenseRtf" Value="lgpl-3.0.rtf" />
     <WixVariable Id="WixUIDialogBmp" Value="Bitmap\welcome.bmp" />
     <WixVariable Id="WixUIBannerBmp" Value="Bitmap\bannrbmp.bmp" />
 
-    <Property Id="ALLUSERS" Secure="yes" Value="2"/>
+    <Property Id="ALLUSERS" Secure="yes" Value="2" />
     <Property Id="MSIINSTALLPERUSER" Secure="yes" Value="1" />
 
     <Property Id="PromptToCloseProcesses" Value="EXCEL" />
@@ -21,7 +20,7 @@
         <ComponentGroupRef Id="UPGRADES" />
         <ComponentGroupRef Id="DATA" />
         <ComponentGroupRef Id="Core" />
-        <ComponentGroupRef Id="PYTHONCODE"/>
+        <ComponentGroupRef Id="PYTHONCODE" />
       </Feature>
 
       <Feature Id="ExcelFeature" Title="Excel Plugin" Level="1">

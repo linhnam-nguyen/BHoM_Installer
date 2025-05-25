@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="CommonAppDataFolder">
+			<StandardDirectory Id="CommonAppDataFolder">
         <Directory Id="INSTALLFOLDER" Name="BHoM">
           <Directory Id="ASSEMBLIESDIR" Name="Assemblies" />
           <Directory Id="FILESDIR" Name="Datasets" />
@@ -33,20 +31,20 @@
             <Directory Id="REVITRESOURCESDIR" Name="Revit" />
           </Directory>
         </Directory>
-      </Directory>
+      </StandardDirectory>
 
-			<Directory Id="AppDataFolder">
+			<StandardDirectory Id="AppDataFolder">
         <Directory Id="OLDINSTALLFOLDER" Name="BHoM">
           <Directory Id="OLDASSEMBLIESDIR" Name="Assemblies" />
         </Directory>
 
-        <Directory Id="GHDIR" Name="Grasshopper" >
+        <Directory Id="GHDIR" Name="Grasshopper">
           <Directory Id="GHLIBSDIR" Name="Libraries">
             <Directory Id="GHBHOMDIR" Name="BHoM" />
           </Directory>
         </Directory>
 
-        <Directory Id="AUTODESKDIR" Name="Autodesk" >
+        <Directory Id="AUTODESKDIR" Name="Autodesk">
           <Directory Id="REVITDIR" Name="Revit">
             <Directory Id="REVITADDINSDIR" Name="Addins">
               <Directory Id="R2021DIR" Name="2021">
@@ -68,51 +66,51 @@
           </Directory>
         </Directory>
 
-        <Directory Id="DYNAMODIR" Name="Dynamo" >
-          <Directory Id="DYNAMOCOREDIR" Name="Dynamo Core" >
-            <Directory Id="DYNAMOCORE13DIR" Name="1.3" >
-              <Directory Id="DYNAMOCORE13PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOCORE13BHOMDIR" Name="BHoM" >
+        <Directory Id="DYNAMODIR" Name="Dynamo">
+          <Directory Id="DYNAMOCOREDIR" Name="Dynamo Core">
+            <Directory Id="DYNAMOCORE13DIR" Name="1.3">
+              <Directory Id="DYNAMOCORE13PKGDIR" Name="packages">
+                <Directory Id="DYNAMOCORE13BHOMDIR" Name="BHoM">
                   <Directory Id="DYNC13BHOMDIR" Name="bin" />
                 </Directory>
               </Directory>
             </Directory>
-            <Directory Id="DYNAMOCORE20DIR" Name="2.0" >
-              <Directory Id="DYNAMOCORE20PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOCORE20BHOMDIR" Name="BHoM" >
+            <Directory Id="DYNAMOCORE20DIR" Name="2.0">
+              <Directory Id="DYNAMOCORE20PKGDIR" Name="packages">
+                <Directory Id="DYNAMOCORE20BHOMDIR" Name="BHoM">
                   <Directory Id="DYNC20BHOMDIR" Name="bin" />
                   <Directory Id="DYNC20BHOMDIREXTRA" Name="extra" />
                 </Directory>
               </Directory>
             </Directory>
-            <Directory Id="DYNAMOCORE23DIR" Name="2.3" >
-              <Directory Id="DYNAMOCORE23PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOCORE23BHOMDIR" Name="BHoM" >
+            <Directory Id="DYNAMOCORE23DIR" Name="2.3">
+              <Directory Id="DYNAMOCORE23PKGDIR" Name="packages">
+                <Directory Id="DYNAMOCORE23BHOMDIR" Name="BHoM">
                   <Directory Id="DYNC23BHOMDIR" Name="bin" />
                   <Directory Id="DYNC23BHOMDIREXTRA" Name="extra" />
                 </Directory>
               </Directory>
             </Directory>
           </Directory>
-          <Directory Id="DYNAMOREVITDIR" Name="Dynamo Revit" >
-            <Directory Id="DYNAMOREVIT13DIR" Name="1.3" >
-              <Directory Id="DYNAMOREVIT13PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOREVIT13BHOMDIR" Name="BHoM" >
+          <Directory Id="DYNAMOREVITDIR" Name="Dynamo Revit">
+            <Directory Id="DYNAMOREVIT13DIR" Name="1.3">
+              <Directory Id="DYNAMOREVIT13PKGDIR" Name="packages">
+                <Directory Id="DYNAMOREVIT13BHOMDIR" Name="BHoM">
                   <Directory Id="DYNR13BHOMDIR" Name="bin" />
                 </Directory>
               </Directory>
             </Directory>
-            <Directory Id="DYNAMOREVIT20DIR" Name="2.0" >
-              <Directory Id="DYNAMOREVIT20PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOREVIT20BHOMDIR" Name="BHoM" >
+            <Directory Id="DYNAMOREVIT20DIR" Name="2.0">
+              <Directory Id="DYNAMOREVIT20PKGDIR" Name="packages">
+                <Directory Id="DYNAMOREVIT20BHOMDIR" Name="BHoM">
                   <Directory Id="DYNR20BHOMDIR" Name="bin" />
                   <Directory Id="DYNR20BHOMDIREXTRA" Name="extra" />
                 </Directory>
               </Directory>
             </Directory>
-            <Directory Id="DYNAMOREVIT23DIR" Name="2.3" >
-              <Directory Id="DYNAMOREVIT23PKGDIR" Name="packages" >
-                <Directory Id="DYNAMOREVIT23BHOMDIR" Name="BHoM" >
+            <Directory Id="DYNAMOREVIT23DIR" Name="2.3">
+              <Directory Id="DYNAMOREVIT23PKGDIR" Name="packages">
+                <Directory Id="DYNAMOREVIT23BHOMDIR" Name="BHoM">
                   <Directory Id="DYNR23BHOMDIR" Name="bin" />
                   <Directory Id="DYNR23BHOMDIREXTRA" Name="extra" />
                 </Directory>
@@ -120,7 +118,6 @@
             </Directory>
           </Directory>
         </Directory>
-      </Directory>
-    </Directory>
-	</Fragment>
+      </StandardDirectory>
+    </Fragment>
 </Wix>

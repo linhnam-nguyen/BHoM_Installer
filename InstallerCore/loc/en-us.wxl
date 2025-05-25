@@ -1,22 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
-  <String Id="WixUIAccept">&amp;Accept</String>
-  <String Id="BHoMWelcomeDlgDescription" Overridable="yes">DISCLAIMER: The BHoM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Before running this installer Rhino, Grasshopper, Revit and Microsoft Excel should be closed during this installation.
-
-NOTE: Running this installer will replace all older versions of the BHoM .dlls with the newer versions.
-
-Copyright (c) [CopyrightHolder]
-&lt;<![CDATA[<a href="]]>[CopyrightUrl]<![CDATA[">]]>[CopyrightUrl]<![CDATA[</a>]]>&gt;</String>
-  <String Id="MaintenanceTypeDlgTitle">{\WixUI_Font_Title}Reinstall or remove BHoM installation</String>
-  <String Id="MaintenanceTypeDlgRepairButton">Reinstall</String>
-  <String Id="MaintenanceTypeDlgRepairButtonTooltip">Reinstall BHoM</String>
-  <String Id="MaintenanceTypeDlgRepairText">Select this option to simply reinstall this particular version of the BHoM on your machine. Do note, this will restore the state of all toolkits and plugins to those included with this version of the BHoM.</String>
-  <String Id="MaintenanceTypeDlgRemoveButton">Remove</String>
-  <String Id="MaintenanceTypeDlgRemoveButtonTooltip">Remove BHoM</String>
-  <String Id="MaintenanceTypeDlgRemoveText">This will uninstall BHoM completely from your machine, removing all plugins and BHoM toolkits.</String>
-  <String Id="VerifyReadyDlgRepairTitle">{\WixUI_Font_Title}Ready to reinstall [ProductName]</String>
-  <String Id="VerifyReadyDlgRepairText">Click Reinstall to start reinstallation of [ProductName]. Click Back to review or change any of your installation settings. Click Cancel to exit the wizard.</String>
-  <String Id="VerifyReadyDlgRepair">Reinstall</String>
+﻿<WixLocalization Culture="en-us" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="WixUIAccept" Value="&amp;Accept" />
+  <String Id="BHoMWelcomeDlgDescription" Overridable="yes" Value="DISCLAIMER: The BHoM is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Before running this installer Rhino, Grasshopper, Revit and Microsoft Excel should be closed during this installation. NOTE: Running this installer will replace all older versions of the BHoM .dlls with the newer versions. Copyright (c) [CopyrightHolder] &lt;&lt;a href=&quot;[CopyrightUrl]&quot;&gt;[CopyrightUrl]&lt;/a&gt;&gt;" />
+  <String Id="MaintenanceTypeDlgTitle" Value="{\WixUI_Font_Title}Reinstall or remove BHoM installation" />
+  <String Id="MaintenanceTypeDlgRepairButton" Value="Reinstall" />
+  <String Id="MaintenanceTypeDlgRepairButtonTooltip" Value="Reinstall BHoM" />
+  <String Id="MaintenanceTypeDlgRepairText" Value="Select this option to simply reinstall this particular version of the BHoM on your machine. Do note, this will restore the state of all toolkits and plugins to those included with this version of the BHoM." />
+  <String Id="MaintenanceTypeDlgRemoveButton" Value="Remove" />
+  <String Id="MaintenanceTypeDlgRemoveButtonTooltip" Value="Remove BHoM" />
+  <String Id="MaintenanceTypeDlgRemoveText" Value="This will uninstall BHoM completely from your machine, removing all plugins and BHoM toolkits." />
+  <String Id="VerifyReadyDlgRepairTitle" Value="{\WixUI_Font_Title}Ready to reinstall [ProductName]" />
+  <String Id="VerifyReadyDlgRepairText" Value="Click Reinstall to start reinstallation of [ProductName]. Click Back to review or change any of your installation settings. Click Cancel to exit the wizard." />
+  <String Id="VerifyReadyDlgRepair" Value="Reinstall" />
 </WixLocalization>

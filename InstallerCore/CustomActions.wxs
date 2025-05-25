@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Fragment>
 
     <Property Id="OFFICEREGKEYS" Value="11.0,12.0,14.0,15.0,16.0" />
@@ -13,13 +12,13 @@
     <CustomAction Id="DelGHLink" Directory="GHLIBSDIR" ExeCommand="cmd.exe /c &quot;del BH.UI.Grasshopper.ghlink&quot;" Execute="commit" Return="ignore"></CustomAction>
 
     <CustomAction Id="Action_RegisterAddIn.SetProperty" Return="check" Property="Action_RegisterAddIn" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_RegisterAddIn" BinaryKey="InstallerCA.CA.dll" DllEntry="CaRegisterAddIn" Return="ignore" Execute="deferred" />
+    <CustomAction Id="Action_RegisterAddIn" DllEntry="CaRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
     <CustomAction Id="Action_UnRegisterAddIn.SetProperty" Return="check" Property="Action_UnRegisterAddIn" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_UnRegisterAddIn" BinaryKey="InstallerCA.CA.dll" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" />
+    <CustomAction Id="Action_UnRegisterAddIn" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
     <CustomAction Id="Action_UnRegisterAddInOld.SetProperty" Return="check" Property="Action_UnRegisterAddInOld" Value="FOLDER=[OLDASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_UnRegisterAddInOld" BinaryKey="InstallerCA.CA.dll" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" />
+    <CustomAction Id="Action_UnRegisterAddInOld" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
 
-    <CustomAction Id="Action_CloseAppsPrompt" BinaryKey="InstallerCA.CA.dll" DllEntry="ClosePrompt" Return="check" />
+    <CustomAction Id="Action_CloseAppsPrompt" DllEntry="ClosePrompt" Return="check" BinaryRef="InstallerCA.CA.dll" />
 
     <SetProperty Id="GHBHoMFolder" Value="[GHBHOMDIR]" Before="CostInitialize" />
     <SetProperty Id="R2021BHoMFolder" Value="[R2021BHOMDIR]" Before="CostInitialize" />

@@ -1,66 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
 	<Fragment>
 
     <ComponentGroup Id="Excel" Directory="ASSEMBLIESDIR">
-      <Component Id="XLL32" Guid="*">
-        <File Source="..\..\Excel_UI\Build\BHoM-AddIn.xll" />
+      <Component Id="XLL32">
+        <File Id="BHoM_AddIn.xll" Source="..\..\Excel_UI\Build\BHoM-AddIn.xll" />
       </Component>
-      <Component Id="XLL64" Guid="*">
-        <File Source="..\..\Excel_UI\Build\BHoM-AddIn64.xll" />
+      <Component Id="XLL64">
+        <File Id="BHoM_AddIn64.xll" Source="..\..\Excel_UI\Build\BHoM-AddIn64.xll" />
       </Component>
-      <Component Id="DNA32" Guid="*">
-        <File Source="..\..\Excel_UI\Build\BHoM-AddIn.dna" />
+      <Component Id="DNA32">
+        <File Id="BHoM_AddIn.dna" Source="..\..\Excel_UI\Build\BHoM-AddIn.dna" />
       </Component>
-      <Component Id="DNA64" Guid="*">
-        <File Source="..\..\Excel_UI\Build\BHoM-AddIn64.dna" />
+      <Component Id="DNA64">
+        <File Id="BHoM_AddIn64.dna" Source="..\..\Excel_UI\Build\BHoM-AddIn64.dna" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Grasshopper" Directory="ASSEMBLIESDIR">
       <Component Id="GHA" Guid="{A1EE1994-996D-4AF2-B61E-DA5C910534CC}">
-        <File KeyPath="yes" Source="..\..\Grasshopper_UI\Build\BH.UI.Grasshopper.dll" Name="BH.UI.Grasshopper.gha" />
+        <File Id="BH.UI.Grasshopper.gha" KeyPath="yes" Source="..\..\Grasshopper_UI\Build\BH.UI.Grasshopper.dll" Name="BH.UI.Grasshopper.gha" />
         <util:RemoveFolderEx On="install" Property="GHBHoMFolder" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Revit2021" Directory="R2021DIR">
       <Component Id="RevitAddin2021">
-        <File Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2021.Addin" />
+        <File Id="BHoM_2021.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2021.Addin" />
         <util:RemoveFolderEx On="install" Property="R2021BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin21" Name="BHoM.Addin"/>
+        <RemoveFile On="install" Id="RemoveLegacyAddin21" Name="BHoM.Addin" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Revit2022" Directory="R2022DIR">
       <Component Id="RevitAddin2022">
-        <File Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin" />
+        <File Id="BHoM_2022.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin" />
         <util:RemoveFolderEx On="install" Property="R2022BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin22" Name="BHoM.Addin"/>
+        <RemoveFile On="install" Id="RemoveLegacyAddin22" Name="BHoM.Addin" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Revit2023" Directory="R2023DIR">
       <Component Id="RevitAddin2023">
-        <File Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2023.Addin" />
+        <File Id="BHoM_2023.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2023.Addin" />
         <util:RemoveFolderEx On="install" Property="R2023BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin23" Name="BHoM.Addin"/>
+        <RemoveFile On="install" Id="RemoveLegacyAddin23" Name="BHoM.Addin" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Revit2024" Directory="R2024DIR">
       <Component Id="RevitAddin2024">
-        <File Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2024.Addin" />
+        <File Id="BHoM_2024.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2024.Addin" />
         <util:RemoveFolderEx On="install" Property="R2024BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin24" Name="BHoM.Addin"/>
+        <RemoveFile On="install" Id="RemoveLegacyAddin24" Name="BHoM.Addin" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="Revit2025" Directory="R2025DIR">
       <Component Id="RevitAddin2025">
-        <File Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2025.Addin" />
+        <File Id="BHoM_2025.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2025.Addin" />
         <util:RemoveFolderEx On="install" Property="R2025BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin25" Name="BHoM.Addin"/>
+        <RemoveFile On="install" Id="RemoveLegacyAddin25" Name="BHoM.Addin" />
       </Component>
     </ComponentGroup>
 
@@ -73,19 +72,19 @@
         <util:RemoveFolderEx On="both" Property="FILESDIR" />
         <util:RemoveFolderEx On="both" Property="UPGRADESDIR" />
         <util:RemoveFolderEx On="both" Property="OLDINSTALLFOLDER" />
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE13BHOMDIR"/>
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE20BHOMDIR"/>
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE23BHOMDIR"/>
-        <util:RemoveFolderEx On="both" Property="DYNAMOREVIT13BHOMDIR"/>
-		    <util:RemoveFolderEx On="both" Property="DYNAMOREVIT20BHOMDIR"/>
+        <util:RemoveFolderEx On="both" Property="DYNAMOCORE13BHOMDIR" />
+        <util:RemoveFolderEx On="both" Property="DYNAMOCORE20BHOMDIR" />
+        <util:RemoveFolderEx On="both" Property="DYNAMOCORE23BHOMDIR" />
+        <util:RemoveFolderEx On="both" Property="DYNAMOREVIT13BHOMDIR" />
+		    <util:RemoveFolderEx On="both" Property="DYNAMOREVIT20BHOMDIR" />
 		    <util:RemoveFolderEx On="both" Property="DYNAMOREVIT23BHOMDIR" />
       </Component>
     </ComponentGroup>
 
     <ComponentGroup Id="SettingsConfig" Directory="SETTINGSDIR">
       <Component Id="SettingsConfig" Guid="00380245-6e1f-4896-9e46-0d87a72f75ad">
-        <File Source="..\Settings\IncludedDLLs.txt" />
-        <File Source="..\Settings\IncludedDatasets.txt" />
+        <File Id="IncludedDLLs.txt" Source="..\Settings\IncludedDLLs.txt" />
+        <File Id="IncludedDatasets.txt" Source="..\Settings\IncludedDatasets.txt" />
       </Component>
     </ComponentGroup>
 
