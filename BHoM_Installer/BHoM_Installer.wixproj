@@ -1,7 +1,7 @@
-<Project Sdk="WixToolset.Sdk/6.0.0">
+<Project Sdk="WixToolset.Sdk/6.0.2">
   <PropertyGroup>
-    <MajorVersion Condition=" '$(MajorVersion)' == '' ">8</MajorVersion>
-    <MinorVersion Condition=" '$(MinorVersion)' == '' ">2</MinorVersion>
+    <MajorVersion Condition=" '$(MajorVersion)' == '' ">9</MajorVersion>
+    <MinorVersion Condition=" '$(MinorVersion)' == '' ">0</MinorVersion>
     <VersionSuffix></VersionSuffix>
     <ProductVersion>$(MajorVersion).$(MinorVersion)</ProductVersion>
     <EnableProjectHarvesting>True</EnableProjectHarvesting>
@@ -12,17 +12,19 @@
     <PatchVersion Condition=" '$(PatchVersion)' == '' ">0</PatchVersion>
     <WixProductVersion>$(ProductVersion).$(ReleaseVersion).$(PatchVersion)</WixProductVersion>
     <OutputPath>..\Build\</OutputPath>
+    <DefineConstants>Version=$(WixProductVersion)</DefineConstants>
+    <SuppressIces>ICE64;ICE38;ICE91;ICE17</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>Debug;Version=$(WixProductVersion);DataDir=DataSets;FilesDir=Assemblies</DefineConstants>
+    <DefineConstants>Debug;$(DefineConstants)</DefineConstants>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
     <SuppressValidation>False</SuppressValidation>
-    <SuppressIces>ICE64;ICE38;ICE91</SuppressIces>
+    <SuppressIces>ICE64;ICE38;ICE91;ICE17</SuppressIces>
     <Cultures>en-US</Cultures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants>Version=$(WixProductVersion);DataDir=DataSets;FilesDir=Assemblies</DefineConstants>
+    <DefineConstants>Version=$(WixProductVersion);$(DefineConstants)</DefineConstants>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Cultures>en-US</Cultures>
   </PropertyGroup>
@@ -48,7 +50,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.Util.wixext" Version="6.0.0" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="6.0.2" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+    <PackageReference Include="WixToolset.Heat" Version="6.0.2" />
   </ItemGroup>
+
+  <Target Name="CleanupStagedFiles" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <StagingBase>$(MSBuildProjectDirectory)\..\InstallerCore\</StagingBase>
+    </PropertyGroup>
+    <ItemGroup>
+      <CleanupDirs Include="$(StagingBase)Assemblies;$(StagingBase)Upgrades;$(StagingBase)DataSets;$(StagingBase)Extensions;$(StagingBase)Resources;$(StagingBase)GrasshopperPlugin;$(StagingBase)ExcelPlugin;$(StagingBase)Revit" />
+    </ItemGroup>
+    <RemoveDir Directories="@(CleanupDirs)" />
+  </Target>
 </Project>

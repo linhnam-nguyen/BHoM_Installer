@@ -1,10 +1,13 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
  
 	<Package Name="Buildings and Habitats object Model" Language="1033" Version="$(var.Version)" Manufacturer="https://bhom.xyz" UpgradeCode="64c4dabf-7d02-4412-b422-953e47c780c8" InstallerVersion="200" Scope="perUser">
 		
     <MajorUpgrade AllowDowngrades="yes" />
 		<MediaTemplate EmbedCab="yes" />
 
+    <Property Id="MsiLogging" Value="vo" />
+
+    <ui:WixUI Id="WixUI_Minimal" />
     <UIRef Id="BHoMInstallerUI" />
 
     <FeatureGroupRef Id="CoreComponents" />

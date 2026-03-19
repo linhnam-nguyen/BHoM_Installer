@@ -1,70 +1,66 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Fragment>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
     <WixVariable Id="WixUILicenseRtf" Value="lgpl-3.0.rtf" />
     <WixVariable Id="WixUIDialogBmp" Value="Bitmap\welcome.bmp" />
     <WixVariable Id="WixUIBannerBmp" Value="Bitmap\bannrbmp.bmp" />
-
-    <Property Id="ALLUSERS" Secure="yes" Value="2" />
-    <Property Id="MSIINSTALLPERUSER" Secure="yes" Value="1" />
-
-    <Property Id="PromptToCloseProcesses" Value="EXCEL" />
-    <Property Id="PromptToCloseDisplayNames" Value="Microsoft Excel" />
-
-    <Property Id="CopyrightHolder" Value="The BHoM Contributors" />
-    <Property Id="CopyrightUrl" Value="https://github.com/BHoM" />
+    
+    <Property Id="PromptToCloseProcesses" Value="EXCEL"></Property>
+    <Property Id="PromptToCloseDisplayNames" Value="Microsoft Excel"></Property>
+    <Property Id="CopyrightHolder" Value="The BHoM Contributors"></Property>
+    <Property Id="CopyrightUrl" Value="https://github.com/BHoM"></Property>
 
     <FeatureGroup Id="CoreComponents">
-      <Feature Id="BHoM" Title="BHoM Core" Level="1">
-        <ComponentGroupRef Id="ASSEMBLIES" />
-        <ComponentGroupRef Id="UPGRADES" />
-        <ComponentGroupRef Id="DATA" />
-        <ComponentGroupRef Id="Core" />
-        <ComponentGroupRef Id="PYTHONCODE" />
+      <Feature Id="BHoM" Level="1" Title="BHoM Core">
+        <ComponentGroupRef Id="ASSEMBLIES"></ComponentGroupRef>
+        <ComponentGroupRef Id="UPGRADES"></ComponentGroupRef>
+        <ComponentGroupRef Id="DATA"></ComponentGroupRef>
+        <ComponentGroupRef Id="Core"></ComponentGroupRef>
+        <ComponentGroupRef Id="PYTHONCODE"></ComponentGroupRef>
       </Feature>
-
-      <Feature Id="ExcelFeature" Title="Excel Plugin" Level="1">
-        <ComponentGroupRef Id="Excel" />
+      <Feature Id="ExcelFeature" Level="1" Title="Excel Plugin">
+        <ComponentGroupRef Id="Excel"></ComponentGroupRef>
+        <ComponentGroupRef Id="EXCELPLUGIN"></ComponentGroupRef>
       </Feature>
-
-      <Feature Id="GrasshopperPlugin" Title="Grasshopper Plugin" Level="1">
-        <ComponentGroupRef Id="Grasshopper" />
+      <Feature Id="GrasshopperPlugin" Level="1" Title="Grasshopper Plugin">
+        <ComponentGroupRef Id="Grasshopper"></ComponentGroupRef>
+        <ComponentGroupRef Id="GRASSHOPPERPLUGIN"></ComponentGroupRef>
       </Feature>
-
-      <Feature Id="RevitPlugin" Title="Revit Plugin" Level="1">
-        <ComponentGroupRef Id="Revit2021" />
-        <ComponentGroupRef Id="Revit2022" />
-        <ComponentGroupRef Id="Revit2023" />
-        <ComponentGroupRef Id="Revit2024" />
-        <ComponentGroupRef Id="Revit2025" />
+      <Feature Id="RevitPlugin" Level="1" Title="Revit Plugin">
+        <ComponentGroupRef Id="Revit2022"></ComponentGroupRef>
+        <ComponentGroupRef Id="REVIT2022PLUGIN"></ComponentGroupRef>
+        <ComponentGroupRef Id="Revit2023"></ComponentGroupRef>
+        <ComponentGroupRef Id="REVIT2023PLUGIN"></ComponentGroupRef>
+        <ComponentGroupRef Id="Revit2024"></ComponentGroupRef>
+        <ComponentGroupRef Id="REVIT2024PLUGIN"></ComponentGroupRef>
+        <ComponentGroupRef Id="Revit2025"></ComponentGroupRef>
+        <ComponentGroupRef Id="REVIT2025PLUGIN"></ComponentGroupRef>
+        <ComponentGroupRef Id="Revit2026"></ComponentGroupRef>
+        <ComponentGroupRef Id="REVIT2026PLUGIN"></ComponentGroupRef>
       </Feature>
-
-      <Feature Id="Settings" Title="Settings" Level="1">
-        <ComponentGroupRef Id="SettingsConfig" />
-        <ComponentGroupRef Id="RevitSettingsConfig" />
-        <ComponentGroupRef Id="RevitSettingsConfig2021" />
-        <ComponentGroupRef Id="RevitSettingsConfig2022" />
-        <ComponentGroupRef Id="RevitSettingsConfig2023" />
-        <ComponentGroupRef Id="RevitSettingsConfig2024" />
-        <ComponentGroupRef Id="RevitSettingsConfig2025" />
+      <Feature Id="Settings" Level="1" Title="Settings">
+        <ComponentGroupRef Id="SettingsConfig"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig2022"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig2023"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig2024"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig2025"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitSettingsConfig2026"></ComponentGroupRef>
       </Feature>
-
-      <Feature Id="Extensions" Title="Extensions" Level="1">
-        <ComponentGroupRef Id="ExtensionsConfig" />
-        <ComponentGroupRef Id="RevitExtensionsConfig" />
-        <ComponentGroupRef Id="RevitExtensionsConfig2021" />
-        <ComponentGroupRef Id="RevitExtensionsConfig2022" />
-        <ComponentGroupRef Id="RevitExtensionsConfig2023" />
-        <ComponentGroupRef Id="RevitExtensionsConfig2024" />
-        <ComponentGroupRef Id="RevitExtensionsConfig2025" />
+      <Feature Id="Extensions" Level="1" Title="Extensions">
+        <ComponentGroupRef Id="ExtensionsConfig"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig2022"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig2023"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig2024"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig2025"></ComponentGroupRef>
+        <ComponentGroupRef Id="RevitExtensionsConfig2026"></ComponentGroupRef>
       </Feature>
     </FeatureGroup>
-
-    <Feature Id="Resources" Title="Resources" Level="1">
-      <ComponentGroupRef Id="RESOURCES" />
+    <Feature Id="Resources" Level="1" Title="Resources">
+      <ComponentGroupRef Id="RESOURCES"></ComponentGroupRef>
       <ComponentGroupRef Id="ResourcesConfig" />
       <ComponentGroupRef Id="RevitResourcesConfig" />
     </Feature>
-    
-	</Fragment>
+  </Fragment>
 </Wix>

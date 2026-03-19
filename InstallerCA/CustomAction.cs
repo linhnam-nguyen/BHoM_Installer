@@ -20,20 +20,16 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using Microsoft.Win32;
 using System.Globalization;
-using System.Net;
-using System.Collections.Specialized;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace InstallerCA
 {
-    public class CustomActions
+    public class CustomAction
     {
         #region Methods
 
@@ -54,12 +50,17 @@ namespace InstallerCA
 
             try
             {
-                session.Log("Enter try block of CaRegisterAddIn");
+                session.Log("DIAGNOSTICS: Starting CaRegisterAddIn");
+                session.Log("DIAGNOSTICS: User: {0}", Environment.UserName);
+                session.Log("DIAGNOSTICS: OS Bitness: {0}", Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit");
 
                 szOfficeRegKeyVersions = session.CustomActionData["OFFICEREGKEYS"];
                 szXll32Bit = session.CustomActionData["XLL32"];
                 szXll64Bit = session.CustomActionData["XLL64"];
                 szFolder = session.CustomActionData["FOLDER"];
+
+                session.Log("DIAGNOSTICS: OfficeRegKeys from MSI: {0}", szOfficeRegKeyVersions);
+                session.Log("DIAGNOSTICS: Target Folder: {0}", szFolder);
 
                 szXll32Bit = szFolder.ToString() + szXll32Bit.ToString();
                 szXll64Bit = szFolder.ToString() + szXll64Bit.ToString();
@@ -72,88 +73,81 @@ namespace InstallerCA
                     {
                         nVersion = double.Parse(szOfficeVersionKey, NumberStyles.Any, CultureInfo.InvariantCulture);
 
-                        session.Log("Retrieving Registry Information for : " + szBaseAddInKey + szOfficeVersionKey);
+                        string fullOfficeKey = szBaseAddInKey + szOfficeVersionKey;
+                        session.Log("DIAGNOSTICS: Checking Office key: HKCU\\{0}", fullOfficeKey);
 
                         // get the OPEN keys from the Software\Microsoft\Office\[Version]\Excel\Options key, skip if office version not found.
-                        if (Registry.CurrentUser.OpenSubKey(szBaseAddInKey + szOfficeVersionKey, false) != null)
+                        using (RegistryKey? rkOffice = Registry.CurrentUser?.OpenSubKey(fullOfficeKey, false))
                         {
-                            string szKeyName = szBaseAddInKey + szOfficeVersionKey + @"\Excel\Options";
-
-                            szXllToRegister = GetAddInName(szXll32Bit, szXll64Bit, szOfficeVersionKey, nVersion);
-
-                            RegistryKey rkExcelXll = Registry.CurrentUser.OpenSubKey(szKeyName, true);
-
-                            if (szXllToRegister != string.Empty && rkExcelXll != null)
+                            if (rkOffice != null)
                             {
-                                string[] szValueNames = rkExcelXll.GetValueNames();
-                                bool bIsOpen = false;
-                                int nMaxOpen = -1;
+                                string szKeyName = fullOfficeKey + @"\Excel\Options";
+                                session.Log("DIAGNOSTICS: Office {0} found. Accessing options: {1}", szOfficeVersionKey, szKeyName);
 
-                                // check every value for OPEN keys
-                                foreach (string szValueName in szValueNames)
+                                szXllToRegister = GetAddInName(session, szXll32Bit, szXll64Bit, szOfficeVersionKey, nVersion);
+                                session.Log("DIAGNOSTICS: Resolved XLL to register: {0}", szXllToRegister);
+
+                                using (RegistryKey? rkExcelXll = Registry.CurrentUser?.OpenSubKey(szKeyName, true))
                                 {
-                                    // if there are already OPEN keys, determine if our key is installed
-                                    if (szValueName.StartsWith("OPEN"))
+                                    if (szXllToRegister != string.Empty && rkExcelXll != null)
                                     {
-                                        nOpenVersion = int.TryParse(szValueName.Substring(4), NumberStyles.Any, CultureInfo.InvariantCulture, out nOpenVersion) ? nOpenVersion : 0;
-                                        int nNewOpen = szValueName == "OPEN" ? 0 : nOpenVersion;
-                                        if (nNewOpen > nMaxOpen)
+                                        string[] szValueNames = rkExcelXll.GetValueNames();
+                                        bool bIsOpen = false;
+                                        int nMaxOpen = -1;
+
+                                        // check every value for OPEN keys
+                                        foreach (string szValueName in szValueNames)
                                         {
-                                            nMaxOpen = nNewOpen;
+                                            if (szValueName.StartsWith("OPEN"))
+                                            {
+                                                string suffix = szValueName.Length > 4 ? szValueName.Substring(4) : "0";
+                                                int nNewOpen = int.TryParse(suffix, NumberStyles.Any, CultureInfo.InvariantCulture, out nOpenVersion) ? nOpenVersion : 0;
+                                                
+                                                if (nNewOpen > nMaxOpen)
+                                                {
+                                                    nMaxOpen = nNewOpen;
+                                                }
+
+                                                var val = rkExcelXll.GetValue(szValueName);
+                                                session.Log("DIAGNOSTICS: Existing {0} value: {1}", szValueName, val);
+
+                                                if (val != null && val.ToString()?.ToLower().Contains(szXllToRegister.ToLower()) == true)
+                                                {
+                                                    session.Log("DIAGNOSTICS: BHoM is already registered in {0}", szValueName);
+                                                    bIsOpen = true;
+                                                }
+                                            }
                                         }
 
-                                        // if the key is our key, set the open flag
-										//NOTE: this line means if the user has changed its office from 32 to 64 (or conversly) without removing the addin then we will not update the key properly
-                                        //The user will have to uninstall addin before installing it again
-                                        if (rkExcelXll.GetValue(szValueName).ToString().ToLower().Contains(szXllToRegister.ToLower()))
+                                        // if adding a new key
+                                        if (!bIsOpen)
                                         {
-                                            bIsOpen = true;
+                                            string newOpenName = nMaxOpen == -1 ? "OPEN" : "OPEN" + (nMaxOpen + 1).ToString();
+                                            string newValue = "/R \"" + szXllToRegister + "\"";
+                                            session.Log("DIAGNOSTICS: Registering BHoM as {0} with value {1}", newOpenName, newValue);
+                                            rkExcelXll.SetValue(newOpenName, newValue);
                                         }
-                                    }
-                                }
-
-                                // if adding a new key
-                                if (!bIsOpen)
-                                {
-                                    if (nMaxOpen == -1)
-                                    {
-                                        rkExcelXll.SetValue("OPEN", "/R \"" + szXllToRegister + "\"");
+                                        bFoundOffice = true;
                                     }
                                     else
                                     {
-                                        rkExcelXll.SetValue("OPEN" + (nMaxOpen + 1).ToString(), "/R \"" + szXllToRegister + "\"");
+                                        session.Log("ERROR: Unable to open Excel Options key for write access or XLL name empty.");
                                     }
-                                    rkExcelXll.Close();
                                 }
-                                bFoundOffice = true;
                             }
                             else
                             {
-                                session.Log("Unable to retrieve key for : " + szKeyName);
+                                session.Log("DIAGNOSTICS: Office version {0} not found in registry, skipping.", szOfficeVersionKey);
                             }
-                        }
-                        else
-                        {
-                            session.Log("Unable to retrieve registry Information for : " + szBaseAddInKey + szOfficeVersionKey);
                         }
                     }
                 }
 
-                session.Log("End CaRegisterAddIn");
-            }
-            catch (System.Security.SecurityException ex)
-            {
-                session.Log("CaRegisterAddIn SecurityException" + ex.Message);
-                bFoundOffice = false;
-            }
-            catch (System.UnauthorizedAccessException ex)
-            {
-                session.Log("CaRegisterAddIn UnauthorizedAccessException" + ex.Message);
-                bFoundOffice = false;
+                session.Log("DIAGNOSTICS: CaRegisterAddIn finished successfully.");
             }
             catch (Exception ex)
             {
-                session.Log("CaRegisterAddIn Exception" + ex.Message);
+                session.Log("FATAL ERROR in CaRegisterAddIn: " + ex.ToString());
                 bFoundOffice = false;
             }
 
@@ -175,7 +169,7 @@ namespace InstallerCA
 
             try
             {
-                session.Log("Begin CaUnRegisterAddIn");
+                session.Log("DIAGNOSTICS: Starting CaUnRegisterAddIn");
 
                 szOfficeRegKeyVersions = session.CustomActionData["OFFICEREGKEYS"];
                 szXll32Bit = session.CustomActionData["XLL32"];
@@ -192,24 +186,31 @@ namespace InstallerCA
 
                     foreach (string szOfficeVersionKey in lstVersions)
                     {
-                        // only remove keys where office version is found
-                        if (Registry.CurrentUser.OpenSubKey(szBaseAddInKey + szOfficeVersionKey, false) != null)
+                        using (RegistryKey? rkOffice = Registry.CurrentUser?.OpenSubKey(szBaseAddInKey + szOfficeVersionKey, false))
                         {
-                            bFoundOffice = true;
-
-                            string szKeyName = szBaseAddInKey + szOfficeVersionKey + @"\Excel\Options";
-
-                            RegistryKey rkAddInKey = Registry.CurrentUser.OpenSubKey(szKeyName, true);
-                            if (rkAddInKey != null)
+                            if (rkOffice != null)
                             {
-                                string[] szValueNames = rkAddInKey.GetValueNames();
+                                bFoundOffice = true;
+                                string szKeyName = szBaseAddInKey + szOfficeVersionKey + @"\Excel\Options";
 
-                                foreach (string szValueName in szValueNames)
+                                using (RegistryKey? rkAddInKey = Registry.CurrentUser?.OpenSubKey(szKeyName, true))
                                 {
-                                     //unregister both 32 and 64 xll
-                                    if (szValueName.StartsWith("OPEN") && (rkAddInKey.GetValue(szValueName).ToString().Contains(szXll32Bit) || rkAddInKey.GetValue(szValueName).ToString().Contains(szXll64Bit)))
+                                    if (rkAddInKey != null)
                                     {
-                                        rkAddInKey.DeleteValue(szValueName);
+                                        string[] szValueNames = rkAddInKey.GetValueNames();
+
+                                        foreach (string szValueName in szValueNames)
+                                        {
+                                            if (szValueName.StartsWith("OPEN"))
+                                            {
+                                                var val = rkAddInKey.GetValue(szValueName);
+                                                if (val != null && (val.ToString()?.Contains(szXll32Bit) == true || val.ToString()?.Contains(szXll64Bit) == true))
+                                                {
+                                                    session.Log("DIAGNOSTICS: Unregistering BHoM from {0}", szValueName);
+                                                    rkAddInKey.DeleteValue(szValueName);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -217,11 +218,11 @@ namespace InstallerCA
                     }
                 }
 
-                session.Log("End CaUnRegisterAddIn");
+                session.Log("DIAGNOSTICS: CaUnRegisterAddIn finished.");
             }
             catch (Exception ex)
             {
-                session.Log(ex.Message);
+                session.Log("ERROR in CaUnRegisterAddIn: " + ex.ToString());
             }
 
             return bFoundOffice ? ActionResult.Success : ActionResult.Failure;
@@ -232,26 +233,36 @@ namespace InstallerCA
         [CustomAction]
         public static ActionResult ClosePrompt(Session session)
         {
-            session.Log("Begin PromptToCloseApplications");
+            session.Log("DIAGNOSTICS: Starting ClosePrompt");
             try
             {
                 var productName = session["ProductName"];
-                var processes = session["PromptToCloseProcesses"].Split(',');
-                var displayNames = session["PromptToCloseDisplayNames"].Split(',');
+                var processesProp = session["PromptToCloseProcesses"];
+                var displayNamesProp = session["PromptToCloseDisplayNames"];
+
+                if (string.IsNullOrEmpty(processesProp) || string.IsNullOrEmpty(displayNamesProp))
+                {
+                    session.Log("DIAGNOSTICS: No processes specified to close.");
+                    return ActionResult.Success;
+                }
+
+                var processes = processesProp.Split(',');
+                var displayNames = displayNamesProp.Split(',');
 
                 if (processes.Length != displayNames.Length)
                 {
-                    session.Log(@"Please check that 'PromptToCloseProcesses' and 'PromptToCloseDisplayNames' exist and have same number of items.");
+                    session.Log("ERROR: Mismatch between PromptToCloseProcesses ({0}) and PromptToCloseDisplayNames ({1})", processes.Length, displayNames.Length);
                     return ActionResult.Failure;
                 }
 
                 for (var i = 0; i < processes.Length; i++)
                 {
-                    session.Log("Prompting process {0} with name {1} to close.", processes[i], displayNames[i]);
+                    session.Log("DIAGNOSTICS: Checking if process {0} ({1}) is running.", processes[i], displayNames[i]);
                     using (var prompt = new PromptCloseApplication(productName, processes[i], displayNames[i]))
                     {
                         if (!prompt.Prompt())
                         {
+                            session.Log("DIAGNOSTICS: User cancelled close prompt for {0}.", processes[i]);
                             return ActionResult.Failure;
                         }
                     }
@@ -259,33 +270,35 @@ namespace InstallerCA
             }
             catch (Exception ex)
             {
-                session.Log("Missing properties or wrong values. Please check that 'PromptToCloseProcesses' and 'PromptToCloseDisplayNames' exist and have same number of items. \nException:" + ex.Message);
+                session.Log("FATAL ERROR in ClosePrompt: " + ex.ToString());
                 return ActionResult.Failure;
             }
 
-            session.Log("End PromptToCloseApplications");
+            session.Log("DIAGNOSTICS: ClosePrompt finished successfully.");
             return ActionResult.Success;
         }
         #endregion
 
         #region GetAddInName
-        public static string GetAddInName(string szXll32Name, string szXll64Name, string szOfficeVersionKey, double nVersion)
+        public static string GetAddInName(Session session, string szXll32Name, string szXll64Name, string szOfficeVersionKey, double nVersion)
         {
             string szXllToRegister = string.Empty;
 
             if (nVersion >= 14)
             {
                 // determine if office is 32-bit or 64-bit
-            	RegistryKey localMachineRegistry = // 64bit machines need to determine correct hive.
-            		RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, 
+                RegistryKey localMachineRegistry = // 64bit machines need to determine correct hive.
+                    RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,
                         Environment.Is64BitOperatingSystem ? RegistryView.Registry64 : RegistryView.Registry32);
-                RegistryKey rkBitness = localMachineRegistry.OpenSubKey(@"Software\Microsoft\Office\" + szOfficeVersionKey + @"\Outlook", false);
-                if (rkBitness != null)
+                
+                string outlookKeyPath = @"Software\Microsoft\Office\" + szOfficeVersionKey + @"\Outlook";
+                using (RegistryKey? rkBitness = localMachineRegistry.OpenSubKey(outlookKeyPath, false))
                 {
-                    object oBitValue = rkBitness.GetValue("Bitness");
-                    if (oBitValue != null)
+                    if (rkBitness != null)
                     {
-                        if (oBitValue.ToString() == "x64")
+                        object? oBitValue = rkBitness.GetValue("Bitness");
+                        session.Log("DIAGNOSTICS: Found Outlook Bitness key: {0}", oBitValue);
+                        if (oBitValue != null && oBitValue.ToString() == "x64")
                         {
                             szXllToRegister = szXll64Name;
                         }
@@ -296,48 +309,43 @@ namespace InstallerCA
                     }
                     else
                     {
-                        szXllToRegister = szXll32Name;
-                    }
-                }
-                else
-                {
-                    if (Environment.Is64BitOperatingSystem)
-                    {
-                        localMachineRegistry = //64bit machines need to check 32bit registry too!
-                            RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
-                        rkBitness =
-                            localMachineRegistry.OpenSubKey(
-                                @"Software\Microsoft\Office\" + szOfficeVersionKey + @"\Outlook", false);
-                        if (rkBitness != null)
+                        if (Environment.Is64BitOperatingSystem)
                         {
-                            var oBitValue = rkBitness.GetValue("Bitness");
-                            if (oBitValue != null)
+                            session.Log("DIAGNOSTICS: Outlook key not found in main hive, checking 32-bit hive.");
+                            using (RegistryKey localMachine32 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
+                            using (RegistryKey? rkBitness32 = localMachine32.OpenSubKey(outlookKeyPath, false))
                             {
-                                if (oBitValue.ToString() == "x64")
+                                if (rkBitness32 != null)
                                 {
-                                    szXllToRegister = szXll64Name;
+                                    var oBitValue = rkBitness32.GetValue("Bitness");
+                                    session.Log("DIAGNOSTICS: Found Outlook Bitness (32-bit hive): {0}", oBitValue);
+                                    if (oBitValue != null && oBitValue.ToString() == "x64")
+                                    {
+                                        szXllToRegister = szXll64Name;
+                                    }
+                                    else
+                                    {
+                                        szXllToRegister = szXll32Name;
+                                    }
                                 }
                                 else
                                 {
+                                    session.Log("DIAGNOSTICS: Outlook key not found in 32-bit hive either. Defaulting to 32-bit XLL.");
                                     szXllToRegister = szXll32Name;
                                 }
-                            }
-                            else
-                            {
-                                szXllToRegister = szXll32Name;
                             }
                         }
                         else
                         {
+                            session.Log("DIAGNOSTICS: Outlook bitness key not found. Defaulting to 32-bit XLL.");
                             szXllToRegister = szXll32Name;
                         }
                     }
-                    else
-                        szXllToRegister = szXll32Name;
                 }
             }
             else
             {
+                session.Log("DIAGNOSTICS: Office version < 14. Defaulting to 32-bit XLL.");
                 szXllToRegister = szXll32Name;
             }
 
@@ -347,7 +355,3 @@ namespace InstallerCA
         #endregion
     }
 }
-
-
-
-

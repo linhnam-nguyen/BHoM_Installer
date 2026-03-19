@@ -1,40 +1,33 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Fragment>
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
     <UI Id="BHoMInstallerUI">
-      <UIRef Id="WixUI_Common" />
-      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
-      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
-      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+      <DialogRef Id="ErrorDlg"></DialogRef>
+      <DialogRef Id="FatalError"></DialogRef>
+      <DialogRef Id="FilesInUse"></DialogRef>
+      <DialogRef Id="MsiRMFilesInUse"></DialogRef>
+      <DialogRef Id="PrepareDlg"></DialogRef>
+      <DialogRef Id="ProgressDlg"></DialogRef>
+      <DialogRef Id="ResumeDlg"></DialogRef>
+      <DialogRef Id="UserExit"></DialogRef>
 
-      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <!-- Flow: Welcome -> License -> VerifyReady -> Progress -->
+      
+      <Publish Control="Next" Dialog="BHoMWelcomeDlg" Event="NewDialog" Value="BHoMLicenseAgreementDlg" Condition="NOT Installed AND NOT PATCH" />
+      <Publish Control="Next" Dialog="BHoMWelcomeDlg" Event="NewDialog" Value="VerifyReadyDlg" Condition="Installed AND PATCH" />
 
+      <Publish Control="Back" Dialog="BHoMLicenseAgreementDlg" Event="NewDialog" Value="BHoMWelcomeDlg" Condition="1" />
+      <Publish Control="Next" Dialog="BHoMLicenseAgreementDlg" Event="NewDialog" Value="VerifyReadyDlg" Condition="1" />
 
-      <DialogRef Id="ErrorDlg" />
-      <DialogRef Id="FatalError" />
-      <DialogRef Id="FilesInUse" />
-      <DialogRef Id="MsiRMFilesInUse" />
-      <DialogRef Id="PrepareDlg" />
-      <DialogRef Id="ProgressDlg" />
-      <DialogRef Id="ResumeDlg" />
-      <DialogRef Id="UserExit" />
+      <Publish Control="Back" Dialog="VerifyReadyDlg" Event="NewDialog" Value="BHoMLicenseAgreementDlg" Condition="NOT Installed OR WixUI_InstallMode = &quot;Change&quot;" />
+      <Publish Control="Back" Dialog="VerifyReadyDlg" Event="NewDialog" Value="BHoMMaintenanceTypeDlg" Condition="WixUI_InstallMode = &quot;Repair&quot; OR WixUI_InstallMode = &quot;Remove&quot;" />
+      <Publish Control="Back" Dialog="VerifyReadyDlg" Event="NewDialog" Value="BHoMWelcomeDlg" Condition="WixUI_InstallMode = &quot;Update&quot;" />
 
-      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999" />
+      <Publish Control="Next" Dialog="MaintenanceWelcomeDlg" Event="NewDialog" Value="BHoMMaintenanceTypeDlg" Condition="1" />
 
-      <Publish Dialog="BHoMWelcomeDlg" Control="Next" Event="NewDialog" Value="BHoMLicenseAgreementDlg" Condition="NOT Installed AND NOT PATCH" />
-      <Publish Dialog="BHoMWelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Condition="Installed AND PATCH" />
-
-      <Publish Dialog="BHoMLicenseAgreementDlg" Control="Back" Event="NewDialog" Value="BHoMWelcomeDlg" />
-      <Publish Dialog="BHoMLicenseAgreementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2" />
-
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="BHoMLicenseAgreementDlg" Order="2" Condition="NOT Installed OR WixUI_InstallMode = &quot;Change&quot;" />
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="BHoMMaintenanceTypeDlg" Order="4" Condition="WixUI_InstallMode = &quot;Repair&quot; OR WixUI_InstallMode = &quot;Remove&quot;" />
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="BHoMWelcomeDlg" Order="2" Condition="WixUI_InstallMode = &quot;Update&quot;" />
-
-      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="BHoMMaintenanceTypeDlg" />
-
-      <Publish Dialog="BHoMMaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg" />
-      <Publish Dialog="BHoMMaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg" />
-      <Publish Dialog="BHoMMaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg" />
+      <Publish Control="RepairButton" Dialog="BHoMMaintenanceTypeDlg" Event="NewDialog" Value="VerifyReadyDlg" Condition="1" />
+      <Publish Control="RemoveButton" Dialog="BHoMMaintenanceTypeDlg" Event="NewDialog" Value="VerifyReadyDlg" Condition="1" />
+      <Publish Control="Back" Dialog="BHoMMaintenanceTypeDlg" Event="NewDialog" Value="MaintenanceWelcomeDlg" Condition="1" />
     </UI>
-	</Fragment>
+  </Fragment>
 </Wix>

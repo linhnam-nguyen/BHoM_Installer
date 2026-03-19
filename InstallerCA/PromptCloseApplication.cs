@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
  *
@@ -20,11 +20,10 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace InstallerCA
 {
@@ -34,12 +33,12 @@ namespace InstallerCA
         private readonly string m_szProductName;
         private readonly string m_szProcessName;
         private readonly string m_szDisplayName;
-        private System.Threading.Timer m_timer;
-        private Form m_form;
+        private System.Threading.Timer? m_timer;
+        private Form? m_form;
         private IntPtr m_mainWindowHanle;
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        public static extern IntPtr FindWindow(string? lpClassName, string lpWindowName);
         #endregion
 
         #region Constructor
@@ -60,7 +59,7 @@ namespace InstallerCA
             if (IsRunning(m_szProcessName))
             {
                 m_form = new ClosePromptForm(String.Format("Please close running instances of {0} before running {1} setup.", m_szDisplayName, m_szProductName));
-                m_mainWindowHanle = FindWindow(null, m_szProductName + " Setup");
+                m_mainWindowHanle = FindWindow(lpClassName: null, m_szProductName + " Setup");
                 if (m_mainWindowHanle == IntPtr.Zero)
                 {
                     m_mainWindowHanle = FindWindow("#32770", m_szProductName);
@@ -83,7 +82,7 @@ namespace InstallerCA
         {
             bool bReturn = false;
 
-            if (m_form.ShowDialog(new WindowWrapper(m_mainWindowHanle)) == DialogResult.OK)
+            if (m_form?.ShowDialog(new WindowWrapper(m_mainWindowHanle)) == DialogResult.OK)
             {
                 bReturn = !IsRunning(m_szProcessName) || ShowDialog();
             }
@@ -92,7 +91,7 @@ namespace InstallerCA
         #endregion
 
         #region TimerElapsed
-        private void TimerElapsed(object sender)
+        private void TimerElapsed(object? sender)
         {
             if (m_form == null || IsRunning(m_szProcessName) || !m_form.Visible)
             {

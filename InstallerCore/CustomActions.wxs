@@ -1,31 +1,24 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Fragment>
-
-    <Property Id="OFFICEREGKEYS" Value="11.0,12.0,14.0,15.0,16.0" />
-
-    <Property Id="XLL32" Value="BHoM-AddIn.xll" />
-    <Property Id="XLL64" Value="BHoM-AddIn64.xll" />
-
-    <Binary Id="InstallerCA.CA.dll" SourceFile="$(var.InstallerCA.TargetDir)$(var.InstallerCA.TargetName).CA.dll" />
-
-    <CustomAction Id="GenGHLink" Directory="GHLIBSDIR" ExeCommand="cmd.exe /c &quot;echo [ASSEMBLIESDIR]BH.UI.Grasshopper.gha &gt; BH.UI.Grasshopper.ghlink&quot;" Execute="commit" Return="ignore"></CustomAction>
-    <CustomAction Id="DelGHLink" Directory="GHLIBSDIR" ExeCommand="cmd.exe /c &quot;del BH.UI.Grasshopper.ghlink&quot;" Execute="commit" Return="ignore"></CustomAction>
-
-    <CustomAction Id="Action_RegisterAddIn.SetProperty" Return="check" Property="Action_RegisterAddIn" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_RegisterAddIn" DllEntry="CaRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
-    <CustomAction Id="Action_UnRegisterAddIn.SetProperty" Return="check" Property="Action_UnRegisterAddIn" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_UnRegisterAddIn" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
-    <CustomAction Id="Action_UnRegisterAddInOld.SetProperty" Return="check" Property="Action_UnRegisterAddInOld" Value="FOLDER=[OLDASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]" />
-    <CustomAction Id="Action_UnRegisterAddInOld" DllEntry="CaUnRegisterAddIn" Return="ignore" Execute="deferred" BinaryRef="InstallerCA.CA.dll" />
-
-    <CustomAction Id="Action_CloseAppsPrompt" DllEntry="ClosePrompt" Return="check" BinaryRef="InstallerCA.CA.dll" />
-
-    <SetProperty Id="GHBHoMFolder" Value="[GHBHOMDIR]" Before="CostInitialize" />
-    <SetProperty Id="R2021BHoMFolder" Value="[R2021BHOMDIR]" Before="CostInitialize" />
-    <SetProperty Id="R2022BHoMFolder" Value="[R2022BHOMDIR]" Before="CostInitialize" />
-    <SetProperty Id="R2023BHoMFolder" Value="[R2023BHOMDIR]" Before="CostInitialize" />
-    <SetProperty Id="R2024BHoMFolder" Value="[R2024BHOMDIR]" Before="CostInitialize" />
-    <SetProperty Id="R2025BHoMFolder" Value="[R2025BHOMDIR]" Before="CostInitialize" />
-
-	</Fragment>
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Fragment>
+    <Property Id="OFFICEREGKEYS" Value="11.0,12.0,14.0,15.0,16.0"></Property>
+    <Property Id="XLL32" Value="BHoM-AddIn.xll"></Property>
+    <Property Id="XLL64" Value="BHoM-AddIn64.xll"></Property>
+    <Binary Id="InstallerCA.CA.dll" SourceFile="$(var.InstallerCA.TargetDir)$(var.InstallerCA.TargetName).CA.dll"></Binary>
+    <CustomAction Directory="GHLIBSDIR" ExeCommand="cmd.exe /c &quot;echo [GRASSHOPPERPLUGINDIR]BH.UI.Grasshopper.gha > BH.UI.Grasshopper.ghlink&quot;" Execute="commit" Id="GenGHLink" Return="ignore"></CustomAction>
+    <CustomAction Directory="GHLIBSDIR" ExeCommand="cmd.exe /c &quot;del BH.UI.Grasshopper.ghlink&quot;" Execute="commit" Id="DelGHLink" Return="ignore"></CustomAction>
+    <CustomAction Id="Action_RegisterAddIn.SetProperty" Property="Action_RegisterAddIn" Return="check" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]"></CustomAction>
+    <CustomAction BinaryRef="InstallerCA.CA.dll" DllEntry="CaRegisterAddIn" Execute="deferred" Id="Action_RegisterAddIn" Return="ignore"></CustomAction>
+    <CustomAction Id="Action_UnRegisterAddIn.SetProperty" Property="Action_UnRegisterAddIn" Return="check" Value="FOLDER=[ASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]"></CustomAction>
+    <CustomAction BinaryRef="InstallerCA.CA.dll" DllEntry="CaUnRegisterAddIn" Execute="deferred" Id="Action_UnRegisterAddIn" Return="ignore"></CustomAction>
+    <CustomAction Id="Action_UnRegisterAddInOld.SetProperty" Property="Action_UnRegisterAddInOld" Return="check" Value="FOLDER=[OLDASSEMBLIESDIR];OFFICEREGKEYS=[OFFICEREGKEYS];XLL32=[XLL32];XLL64=[XLL64]"></CustomAction>
+    <CustomAction BinaryRef="InstallerCA.CA.dll" DllEntry="CaUnRegisterAddIn" Execute="deferred" Id="Action_UnRegisterAddInOld" Return="ignore"></CustomAction>
+    <CustomAction BinaryRef="InstallerCA.CA.dll" DllEntry="ClosePrompt" Id="Action_CloseAppsPrompt" Return="check"></CustomAction>
+    <SetProperty Before="CostInitialize" Id="GHBHoMFolder" Value="[GHBHOMDIR]"></SetProperty>
+    <SetProperty Before="CostInitialize" Id="R2022BHoMFolder" Value="[R2022BHOMDIR]"></SetProperty>
+    <SetProperty Before="CostInitialize" Id="R2023BHoMFolder" Value="[R2023BHOMDIR]"></SetProperty>
+    <SetProperty Before="CostInitialize" Id="R2024BHoMFolder" Value="[R2024BHOMDIR]"></SetProperty>
+    <SetProperty Before="CostInitialize" Id="R2025BHoMFolder" Value="[R2025BHOMDIR]"></SetProperty>
+    <SetProperty Before="CostInitialize" Id="R2026BHoMFolder" Value="[R2026BHOMDIR]"></SetProperty>
+  </Fragment>
 </Wix>

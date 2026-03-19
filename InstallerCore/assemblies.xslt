@@ -1,11 +1,10 @@
 <xsl:stylesheet version="1.0"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-            xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-            exclude-result-prefixes="msxsl"
             xmlns:wix="http://wixtoolset.org/schemas/v4/wxs"
-            xmlns:my="my:my">
+            xmlns="http://wixtoolset.org/schemas/v4/wxs"
+            exclude-result-prefixes="wix">
 
-  <xsl:output method="xml" indent="yes" />
+  <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:strip-space elements="*"/>
 
@@ -15,12 +14,8 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match='wix:Wix/wix:Fragment/wix:ComponentGroup/wix:Component[@Directory="ASSEMBLIESDIR"]/wix:File'>
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:attribute name="KeyPath">
-        <xsl:text>no</xsl:text>
-      </xsl:attribute>
-    </xsl:copy>
-  </xsl:template>
+  <!-- Suppress Class and TypeLib elements which cause ICE errors or WIX0047 when not parented -->
+  <xsl:template match="wix:Class" />
+  <xsl:template match="wix:TypeLib" />
+
 </xsl:stylesheet>

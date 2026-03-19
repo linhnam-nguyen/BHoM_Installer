@@ -1,182 +1,167 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-	<Fragment>
-
-    <ComponentGroup Id="Excel" Directory="ASSEMBLIESDIR">
-      <Component Id="XLL32">
-        <File Id="BHoM_AddIn.xll" Source="..\..\Excel_UI\Build\BHoM-AddIn.xll" />
-      </Component>
-      <Component Id="XLL64">
-        <File Id="BHoM_AddIn64.xll" Source="..\..\Excel_UI\Build\BHoM-AddIn64.xll" />
-      </Component>
-      <Component Id="DNA32">
-        <File Id="BHoM_AddIn.dna" Source="..\..\Excel_UI\Build\BHoM-AddIn.dna" />
-      </Component>
-      <Component Id="DNA64">
-        <File Id="BHoM_AddIn64.dna" Source="..\..\Excel_UI\Build\BHoM-AddIn64.dna" />
-      </Component>
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Fragment>
+    <!-- Manual groups for extra logic -->
+    <ComponentGroup Directory="ASSEMBLIESDIR" Id="Excel">
+      <!-- Logic for Excel if any (registry keys etc. are in InstallerCA) -->
     </ComponentGroup>
 
-    <ComponentGroup Id="Grasshopper" Directory="ASSEMBLIESDIR">
+    <ComponentGroup Directory="GRASSHOPPERPLUGINDIR" Id="Grasshopper">
       <Component Id="GHA" Guid="{A1EE1994-996D-4AF2-B61E-DA5C910534CC}">
-        <File Id="BH.UI.Grasshopper.gha" KeyPath="yes" Source="..\..\Grasshopper_UI\Build\BH.UI.Grasshopper.dll" Name="BH.UI.Grasshopper.gha" />
-        <util:RemoveFolderEx On="install" Property="GHBHoMFolder" />
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="GHBHoMFolder"></util:RemoveFolderEx>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Revit2021" Directory="R2021DIR">
-      <Component Id="RevitAddin2021">
-        <File Id="BHoM_2021.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2021.Addin" />
-        <util:RemoveFolderEx On="install" Property="R2021BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin21" Name="BHoM.Addin" />
+    <ComponentGroup Directory="R2022DIR" Id="Revit2022">
+      <Component Id="RevitAddin2022" Guid="{8B32B669-D0A4-4A3C-8A95-6548B8E8E922}">
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="R2022BHoMFolder"></util:RemoveFolderEx>
+        <RemoveFile Id="RemoveLegacyAddin22" Name="BHoM.Addin" On="install"></RemoveFile>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Revit2022" Directory="R2022DIR">
-      <Component Id="RevitAddin2022">
-        <File Id="BHoM_2022.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin" />
-        <util:RemoveFolderEx On="install" Property="R2022BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin22" Name="BHoM.Addin" />
+    <ComponentGroup Directory="R2023DIR" Id="Revit2023">
+      <Component Id="RevitAddin2023" Guid="{3A4B8F3C-9E7A-4B6E-B58A-65D9C4A1F8F3}">
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="R2023BHoMFolder"></util:RemoveFolderEx>
+        <RemoveFile Id="RemoveLegacyAddin23" Name="BHoM.Addin" On="install"></RemoveFile>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Revit2023" Directory="R2023DIR">
-      <Component Id="RevitAddin2023">
-        <File Id="BHoM_2023.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2023.Addin" />
-        <util:RemoveFolderEx On="install" Property="R2023BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin23" Name="BHoM.Addin" />
+    <ComponentGroup Directory="R2024DIR" Id="Revit2024">
+      <Component Id="RevitAddin2024" Guid="{D6C9B6E9-9A8E-4B7E-8C9B-6F9B6E9A8E4B}">
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="R2024BHoMFolder"></util:RemoveFolderEx>
+        <RemoveFile Id="RemoveLegacyAddin24" Name="BHoM.Addin" On="install"></RemoveFile>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Revit2024" Directory="R2024DIR">
-      <Component Id="RevitAddin2024">
-        <File Id="BHoM_2024.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2024.Addin" />
-        <util:RemoveFolderEx On="install" Property="R2024BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin24" Name="BHoM.Addin" />
+    <ComponentGroup Directory="R2025DIR" Id="Revit2025">
+      <Component Id="RevitAddin2025" Guid="{E5B8C7D8-7A6B-4F5E-9D8C-7A6B4F5E9D8C}">
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="R2025BHoMFolder"></util:RemoveFolderEx>
+        <RemoveFile Id="RemoveLegacyAddin25" Name="BHoM.Addin" On="install"></RemoveFile>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Revit2025" Directory="R2025DIR">
-      <Component Id="RevitAddin2025">
-        <File Id="BHoM_2025.Addin" Source="..\..\Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2025.Addin" />
-        <util:RemoveFolderEx On="install" Property="R2025BHoMFolder" />
-        <RemoveFile On="install" Id="RemoveLegacyAddin25" Name="BHoM.Addin" />
+    <ComponentGroup Directory="R2026DIR" Id="Revit2026">
+      <Component Id="RevitAddin2026" Guid="{A1B2C3D4-E5F6-4A5B-8C9D-E1F2A3B4C5D6}">
+        <CreateFolder />
+        <util:RemoveFolderEx On="install" Property="R2026BHoMFolder"></util:RemoveFolderEx>
+        <RemoveFile Id="RemoveLegacyAddin26" Name="BHoM.Addin" On="install"></RemoveFile>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="Core" Directory="INSTALLFOLDER">
-      <Component Id="CleanExisting">
-        <RegistryKey Root="HKCU" Key="Software\BHoM">
+    <ComponentGroup Directory="INSTALLFOLDER" Id="Core">
+      <Component Id="CleanExisting" Guid="{F1B2C3D4-E5F6-4A5B-8C9D-E1F2A3B4C5D6}">
+        <RegistryKey Key="Software\BHoM" Root="HKCU">
           <RegistryValue Name="Installer" Type="integer" Value="1"></RegistryValue>
         </RegistryKey>
-        <util:RemoveFolderEx On="both" Property="ASSEMBLIESDIR" />
-        <util:RemoveFolderEx On="both" Property="FILESDIR" />
-        <util:RemoveFolderEx On="both" Property="UPGRADESDIR" />
-        <util:RemoveFolderEx On="both" Property="OLDINSTALLFOLDER" />
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE13BHOMDIR" />
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE20BHOMDIR" />
-        <util:RemoveFolderEx On="both" Property="DYNAMOCORE23BHOMDIR" />
-        <util:RemoveFolderEx On="both" Property="DYNAMOREVIT13BHOMDIR" />
-		    <util:RemoveFolderEx On="both" Property="DYNAMOREVIT20BHOMDIR" />
-		    <util:RemoveFolderEx On="both" Property="DYNAMOREVIT23BHOMDIR" />
+        <util:RemoveFolderEx On="both" Property="ASSEMBLIESDIR"></util:RemoveFolderEx>
+        <util:RemoveFolderEx On="both" Property="GRASSHOPPERPLUGINDIR"></util:RemoveFolderEx>
+        <util:RemoveFolderEx On="both" Property="FILESDIR"></util:RemoveFolderEx>
+        <util:RemoveFolderEx On="both" Property="UPGRADESDIR"></util:RemoveFolderEx>
+        <util:RemoveFolderEx On="both" Property="OLDINSTALLFOLDER"></util:RemoveFolderEx>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="SettingsConfig" Directory="SETTINGSDIR">
-      <Component Id="SettingsConfig" Guid="00380245-6e1f-4896-9e46-0d87a72f75ad">
-        <File Id="IncludedDLLs.txt" Source="..\Settings\IncludedDLLs.txt" />
-        <File Id="IncludedDatasets.txt" Source="..\Settings\IncludedDatasets.txt" />
+    <ComponentGroup Directory="SETTINGSDIR" Id="SettingsConfig">
+      <Component Guid="00380245-6e1f-4896-9e46-0d87a72f75ad" Id="SettingsConfig">
+        <File Source="..\Settings\IncludedDLLs.txt"></File>
+        <File Source="..\Settings\IncludedDatasets.txt"></File>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig" Directory="REVITSETTINGSDIR">
-      <Component Id="RevitSettingsConfig" Guid="8665ac0e-edaf-44e4-a7fa-06380ac608f9">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR" Id="RevitSettingsConfig">
+      <Component Guid="8665ac0e-edaf-44e4-a7fa-06380ac608f9" Id="RevitSettingsConfig">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig2021" Directory="REVITSETTINGSDIR2021">
-      <Component Id="RevitSettingsConfig2021" Guid="9043f36a-d1fb-4b38-aecc-85c758126c3b">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR2022" Id="RevitSettingsConfig2022">
+      <Component Guid="81ca731c-6965-451a-9706-416db6231350" Id="RevitSettingsConfig2022">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig2022" Directory="REVITSETTINGSDIR2022">
-      <Component Id="RevitSettingsConfig2022" Guid="81ca731c-6965-451a-9706-416db6231350">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR2023" Id="RevitSettingsConfig2023">
+      <Component Guid="{D7AB23C4-8071-44A5-92F5-8656B92CC606}" Id="RevitSettingsConfig2023">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig2023" Directory="REVITSETTINGSDIR2023">
-      <Component Id="RevitSettingsConfig2023" Guid="d7ab23c4-8071-44a5-92f5-8656b92cc606">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR2024" Id="RevitSettingsConfig2024">
+      <Component Guid="913af53a-ec07-4104-b80f-5c3145e7edcb" Id="RevitSettingsConfig2024">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig2024" Directory="REVITSETTINGSDIR2024">
-      <Component Id="RevitSettingsConfig2024" Guid="913af53a-ec07-4104-b80f-5c3145e7edcb">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR2025" Id="RevitSettingsConfig2025">
+      <Component Guid="81e438a0-8674-4341-93f2-a8a820206817" Id="RevitSettingsConfig2025">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitSettingsConfig2025" Directory="REVITSETTINGSDIR2025">
-      <Component Id="RevitSettingsConfig2025" Guid="81e438a0-8674-4341-93f2-a8a820206817">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITSETTINGSDIR2026" Id="RevitSettingsConfig2026">
+      <Component Guid="ea950f33-5779-4cb2-99a1-1fb4314dc9bd" Id="RevitSettingsConfig2026">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="ExtensionsConfig" Directory="EXTENSIONSDIR">
-      <Component Id="ExtensionsConfig" Guid="b8cd0c91-2ebc-4bd6-ad2b-1e28fc9e6ad3">
-        <CreateFolder />
-      </Component>
-    </ComponentGroup>
-    
-    <ComponentGroup Id="RevitExtensionsConfig" Directory="REVITEXTENSIONSDIR">
-      <Component Id="RevitExtensionsConfig" Guid="6cf78449-1a6e-42c5-8212-9e39e85dcc59">
-        <CreateFolder />
+    <ComponentGroup Directory="EXTENSIONSDIR" Id="ExtensionsConfig">
+      <Component Guid="b8cd0c91-2ebc-4bd6-ad2b-1e28fc9e6ad3" Id="ExtensionsConfig">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitExtensionsConfig2021" Directory="REVITEXTENSIONSDIR2021">
-      <Component Id="RevitExtensionsConfig2021" Guid="e963fd78-a358-43f0-959c-243c4e77de1d">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR" Id="RevitExtensionsConfig">
+      <Component Guid="6cf78449-1a6e-42c5-8212-9e39e85dcc59" Id="RevitExtensionsConfig">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitExtensionsConfig2022" Directory="REVITEXTENSIONSDIR2022">
-      <Component Id="RevitExtensionsConfig2022" Guid="b325b038-fcea-48df-819d-eb40d44f3733">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR2022" Id="RevitExtensionsConfig2022">
+      <Component Guid="b325b038-fcea-48df-819d-eb40d44f3733" Id="RevitExtensionsConfig2022">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitExtensionsConfig2023" Directory="REVITEXTENSIONSDIR2023">
-      <Component Id="RevitExtensionsConfig2023" Guid="6d8d5d13-44f5-4a8c-bead-be4870ea2f6d">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR2023" Id="RevitExtensionsConfig2023">
+      <Component Guid="{6D8D5D13-44F5-4A8C-BEAD-BE4870EA2F6D}" Id="RevitExtensionsConfig2023">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitExtensionsConfig2024" Directory="REVITEXTENSIONSDIR2024">
-      <Component Id="RevitExtensionsConfig2024" Guid="d33fcffd-3abf-486e-8030-e4945bc9f007">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR2024" Id="RevitExtensionsConfig2024">
+      <Component Guid="d33fcffd-3abf-486e-8030-e4945bc9f007" Id="RevitExtensionsConfig2024">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitExtensionsConfig2025" Directory="REVITEXTENSIONSDIR2025">
-      <Component Id="RevitExtensionsConfig2025" Guid="7a65f759-009b-4f87-8a9b-2cb36ed207ef">
-        <CreateFolder />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR2025" Id="RevitExtensionsConfig2025">
+      <Component Guid="7a65f759-009b-4f87-8a9b-2cb36ed207ef" Id="RevitExtensionsConfig2025">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="ResourcesConfig" Directory="RESOURCESDIR">
-      <Component Id="ResourcesConfig" Guid="922ede0a-a035-41e4-adb1-642992cc756a">
-        <CreateFolder />
-        <util:RemoveFolderEx On="both" Property="RESOURCESDIR" />
+    <ComponentGroup Directory="REVITEXTENSIONSDIR2026" Id="RevitExtensionsConfig2026">
+      <Component Guid="5f7df272-f12a-41a0-ad1b-d6414a7a1487" Id="RevitExtensionsConfig2026">
+        <CreateFolder></CreateFolder>
       </Component>
     </ComponentGroup>
 
-    <ComponentGroup Id="RevitResourcesConfig" Directory="REVITRESOURCESDIR">
-      <Component Id="RevitResourcesConfig" Guid="d08d998a-bcc3-41b4-9378-7f439e09b5af">
-        <CreateFolder />
+    <ComponentGroup Directory="RESOURCESDIR" Id="ResourcesConfig">
+      <Component Guid="922ede0a-a035-41e4-adb1-642992cc756a" Id="ResourcesConfig">
+        <CreateFolder></CreateFolder>
+        <util:RemoveFolderEx On="both" Property="RESOURCESDIR"></util:RemoveFolderEx>
       </Component>
     </ComponentGroup>
-	</Fragment>
+
+    <ComponentGroup Directory="REVITRESOURCESDIR" Id="RevitResourcesConfig">
+      <Component Guid="d08d998a-bcc3-41b4-9378-7f439e09b5af" Id="RevitResourcesConfig">
+        <CreateFolder></CreateFolder>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

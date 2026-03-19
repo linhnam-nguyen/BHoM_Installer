@@ -1,64 +1,163 @@
-<Project>
-  <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="6.0.0" />
+<Project Sdk="WixToolset.Sdk/6.0.2">
   <PropertyGroup>
+    <OutputName>InstallerCore</OutputName>
     <OutputType>Library</OutputType>
-    <SuppressIces>ICE64;ICE38;ICE91</SuppressIces>
+    
+    <SuppressIces>ICE64;ICE38;ICE91;ICE17</SuppressIces>
+    <SuppressSpecificWarnings>5151</SuppressSpecificWarnings>
+    <!-- Use MSBuildProjectDirectory to ensure absolute path -->
+    <DefineConstants>
+      InstallerCoreProjectDir=$(MSBuildProjectDirectory)\;
+      UpgradesDir=$(MSBuildProjectDirectory)\Upgrades;
+      DataDir=$(MSBuildProjectDirectory)\Datasets;
+      FilesDir=$(MSBuildProjectDirectory)\Assemblies;
+      ResourcesDir=$(MSBuildProjectDirectory)\Resources;
+      PythonCodeDir=$(MSBuildProjectDirectory)\Extensions\PythonCode;
+      GrasshopperPluginDir=$(MSBuildProjectDirectory)\GrasshopperPlugin;
+      ExcelPluginDir=$(MSBuildProjectDirectory)\ExcelPlugin;
+      Revit2022Dir=$(MSBuildProjectDirectory)\Revit\2022;
+      Revit2023Dir=$(MSBuildProjectDirectory)\Revit\2023;
+      Revit2024Dir=$(MSBuildProjectDirectory)\Revit\2024;
+      Revit2025Dir=$(MSBuildProjectDirectory)\Revit\2025;
+      Revit2026Dir=$(MSBuildProjectDirectory)\Revit\2026
+    </DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>UpgradesDir=..\..\BHoM_Installer\InstallerCore\Upgrades;DataDir=..\..\BHoM_Installer\InstallerCore\DataSets;FilesDir=..\..\BHoM_Installer\InstallerCore\Assemblies;ResourcesDir=..\..\BHoM_Installer\InstallerCore\Resources;PythonCodeDir=..\..\BHoM_Installer\InstallerCore\Extensions\PythonCode</DefineConstants>
-    <VerboseOutput>False</VerboseOutput>
-    <BindFiles>False</BindFiles>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>False</Pedantic>
-    <RunWixToolsOutOfProc Condition=" '$(PROCESSOR_ARCHITECTURE)'!='x86' ">true</RunWixToolsOutOfProc>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <WixVariables></WixVariables>
-    <DefineConstants>UpgradesDir=..\..\BHoM_Installer\InstallerCore\Upgrades;DataDir=..\..\BHoM_Installer\InstallerCore\DataSets;FilesDir=..\..\BHoM_Installer\InstallerCore\Assemblies;</DefineConstants>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>False</Pedantic>
-    <RunWixToolsOutOfProc Condition=" '$(PROCESSOR_ARCHITECTURE)'!='x86' ">true</RunWixToolsOutOfProc>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="WixToolset.Util.wixext" Version="6.0.0" />
-    <PackageReference Include="WixToolset.Heat" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InstallerCA\InstallerCA.csproj">
-      <Name>InstallerCA</Name>
-      <Project>{639d9368-7833-42b3-b166-6fef55a21001}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="assemblies.xslt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="loc\" />
-    <Folder Include="UI\" />
-  </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="WixToolset.Sdk" Version="6.0.0" />
-  <Target Name="BeforeBuild">
-    <Exec WorkingDirectory="$(ProjectDir)" Command="xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Assemblies\* Assemblies" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Upgrades\* Upgrades" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="del Assemblies\*.dna Assemblies\*.xll Assemblies\*.gha" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Datasets DataSets" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Extensions\PythonCode\* Extensions\PythonCode" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="xcopy /Y /I /E /C $(ALLUSERSPROFILE)\BHoM\Resources\* Resources" />
-    <HeatDirectory ToolPath="$(WixToolPath)" OutputFile="$(IntermediateOutputPath)_resources.wxs" DirectoryRefId="RESOURCESDIR" Directory="$(ProjectDir)Resources" ComponentGroupName="RESOURCES" PreprocessorVariable="var.ResourcesDir" AutogenerateGuids="false" SuppressRegistry="true" SuppressRootDirectory="true" GenerateGuidsNow="true" />
-    <HeatDirectory ToolPath="$(WixToolPath)" OutputFile="$(IntermediateOutputPath)_assemblies.wxs" DirectoryRefId="ASSEMBLIESDIR" Directory="$(ProjectDir)Assemblies" ComponentGroupName="ASSEMBLIES" PreprocessorVariable="var.FilesDir" AutogenerateGuids="false" SuppressRegistry="true" SuppressRootDirectory="true" GenerateGuidsNow="true" Transforms="assemblies.xslt" />
-    <HeatDirectory ToolPath="$(WixToolPath)" OutputFile="$(IntermediateOutputPath)_datasets.wxs" DirectoryRefId="FILESDIR" Directory="$(ProjectDir)DataSets" ComponentGroupName="DATA" PreprocessorVariable="var.DataDir" AutogenerateGuids="false" SuppressRegistry="true" SuppressRootDirectory="true" GenerateGuidsNow="true" />
-    <HeatDirectory ToolPath="$(WixToolPath)" OutputFile="$(IntermediateOutputPath)_upgrades.wxs" DirectoryRefId="UPGRADESDIR" Directory="$(ProjectDir)Upgrades" ComponentGroupName="UPGRADES" PreprocessorVariable="var.UpgradesDir" AutogenerateGuids="false" SuppressRegistry="true" SuppressRootDirectory="true" GenerateGuidsNow="true" />
-    <HeatDirectory ToolPath="$(WixToolPath)" OutputFile="$(IntermediateOutputPath)_pythoncode.wxs" DirectoryRefId="PYTHONCODEDIR" Directory="$(ProjectDir)Extensions\PythonCode" ComponentGroupName="PYTHONCODE" PreprocessorVariable="var.PythonCodeDir" AutogenerateGuids="false" SuppressRegistry="true" SuppressRootDirectory="true" GenerateGuidsNow="true" />
-    <ItemGroup>
-      <Compile Include="$(IntermediateOutputPath)_assemblies.wxs" />
-      <Compile Include="$(IntermediateOutputPath)_datasets.wxs" />
-      <Compile Include="$(IntermediateOutputPath)_upgrades.wxs" />
-      <Compile Include="$(IntermediateOutputPath)_pythoncode.wxs" />
-      <Compile Include="$(IntermediateOutputPath)_resources.wxs" />
-    </ItemGroup>
+<ItemGroup>
+  <PackageReference Include="WixToolset.Util.wixext" Version="6.0.2" />
+  <PackageReference Include="WixToolset.Heat" Version="6.0.2" />
+  <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+</ItemGroup>
+
+<ItemGroup>
+  <ProjectReference Include="..\InstallerCA\InstallerCA.csproj" />
+</ItemGroup>
+
+<ItemGroup>
+  <!-- We point DirectoryRefId to the PARENT directory of the harvested folder name 
+       to avoid double nesting (e.g. Assemblies\Assemblies) -->
+  
+  <HarvestDirectory Include="Assemblies">
+    <ComponentGroupName>ASSEMBLIES</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.FilesDir</PreprocessorVariable>
+    <Transforms>assemblies.xslt</Transforms>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Resources">
+    <ComponentGroupName>RESOURCES</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.ResourcesDir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Datasets">
+    <ComponentGroupName>DATA</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.DataDir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Upgrades">
+    <ComponentGroupName>UPGRADES</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.UpgradesDir</PreprocessorVariable>
+    <KeepEmptyDirectories>true</KeepEmptyDirectories>
+    <Transforms>empty_folder_guid.xslt</Transforms>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Extensions\PythonCode">
+    <ComponentGroupName>PYTHONCODE</ComponentGroupName>
+    <DirectoryRefId>EXTENSIONSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.PythonCodeDir</PreprocessorVariable>
+    <KeepEmptyDirectories>true</KeepEmptyDirectories>
+    <Transforms>empty_folder_guid.xslt</Transforms>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="GrasshopperPlugin">
+    <ComponentGroupName>GRASSHOPPERPLUGIN</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.GrasshopperPluginDir</PreprocessorVariable>
+    <KeepEmptyDirectories>true</KeepEmptyDirectories>
+    <Transforms>empty_folder_guid.xslt</Transforms>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <!-- ExcelPlugin files usually go into Assemblies folder flat? 
+       If so, we should either merge them or use a transform. 
+       For now, let's keep it as is but fix the nesting. -->
+  <HarvestDirectory Include="ExcelPlugin">
+    <ComponentGroupName>EXCELPLUGIN</ComponentGroupName>
+    <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+    <PreprocessorVariable>var.ExcelPluginDir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Revit\2022">
+    <ComponentGroupName>REVIT2022PLUGIN</ComponentGroupName>
+    <DirectoryRefId>REVITADDINSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.Revit2022Dir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Revit\2023">
+    <ComponentGroupName>REVIT2023PLUGIN</ComponentGroupName>
+    <DirectoryRefId>REVITADDINSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.Revit2023Dir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Revit\2024">
+    <ComponentGroupName>REVIT2024PLUGIN</ComponentGroupName>
+    <DirectoryRefId>REVITADDINSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.Revit2024Dir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Revit\2025">
+    <ComponentGroupName>REVIT2025PLUGIN</ComponentGroupName>
+    <DirectoryRefId>REVITADDINSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.Revit2025Dir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+
+  <HarvestDirectory Include="Revit\2026">
+    <ComponentGroupName>REVIT2026PLUGIN</ComponentGroupName>
+    <DirectoryRefId>REVITADDINSDIR</DirectoryRefId>
+    <PreprocessorVariable>var.Revit2026Dir</PreprocessorVariable>
+    <SuppressRegistry>true</SuppressRegistry>
+  </HarvestDirectory>
+</ItemGroup>
+
+  <Target Name="StageBinaries" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+        <ReposBaseDir>$(ProjectDir)..\..\</ReposBaseDir>
+    </PropertyGroup>
+    <!-- Ensure directories exist -->
+    <MakeDir Directories="Assemblies;Upgrades;Datasets;Extensions\PythonCode;Resources;GrasshopperPlugin;ExcelPlugin;Revit\2022;Revit\2023;Revit\2024;Revit\2025;Revit\2026" />
+    
+    <!-- Excel Plugin -->
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Excel_UI\Build xcopy /Y /I /E $(ReposBaseDir)Excel_UI\Build\*.xll ExcelPlugin" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Excel_UI\Build xcopy /Y /I /E $(ReposBaseDir)Excel_UI\Build\*.dna ExcelPlugin" />
+
+    <!-- Grasshopper Plugin -->
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Grasshopper_UI\Build xcopy /Y /I /E $(ReposBaseDir)Grasshopper_UI\Build\*.gha GrasshopperPlugin" />
+
+    <!-- Revit Addins -->
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin Revit\2022" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2023.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2023.Addin Revit\2023" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2024.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2024.Addin Revit\2024" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2025.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2025.Addin Revit\2025" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2026.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2026.Addin Revit\2026" />
+
+    <!-- Fallback for other files -->
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ALLUSERSPROFILE)\BHoM\Assemblies xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Assemblies\* Assemblies" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ALLUSERSPROFILE)\BHoM\Upgrades xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Upgrades\* Upgrades" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ALLUSERSPROFILE)\BHoM\Datasets xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Datasets Datasets" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ALLUSERSPROFILE)\BHoM\Extensions\PythonCode xcopy /Y /I /E $(ALLUSERSPROFILE)\BHoM\Extensions\PythonCode\* Extensions\PythonCode" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ALLUSERSPROFILE)\BHoM\Resources xcopy /Y /I /E /C $(ALLUSERSPROFILE)\BHoM\Resources\* Resources" />
+    
   </Target>
 </Project>

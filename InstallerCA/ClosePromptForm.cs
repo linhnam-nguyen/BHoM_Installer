@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of the Buildings and Habitats object Model (BHoM)
  * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
  *
@@ -25,17 +25,20 @@ using System.Windows.Forms;
 
 namespace InstallerCA
 {
-   public partial class ClosePromptForm : Form {
-      public ClosePromptForm(string text) {
-         InitializeComponent();
-         messageText.Text = text;
-      }
+    public partial class ClosePromptForm : Form
+    {
+        public ClosePromptForm(string text)
+        {
+            InitializeComponent();
+            messageText.Text = text;
+        }
 
-      private void OkButtonClick(object sender, EventArgs e) {
-         DialogResult = DialogResult.OK;
-         Close();
-      }
-   }
+        private void OkButtonClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+    }
 }
 
 
