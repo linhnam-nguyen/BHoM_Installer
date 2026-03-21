@@ -143,7 +143,9 @@
     <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Excel_UI\Build xcopy /Y /I /E $(ReposBaseDir)Excel_UI\Build\*.dna ExcelPlugin" />
 
     <!-- Grasshopper Plugin -->
-    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Grasshopper_UI\Build xcopy /Y /I /E $(ReposBaseDir)Grasshopper_UI\Build\*.gha GrasshopperPlugin" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Grasshopper_UI\Build\BH.UI.Grasshopper.dll xcopy /Y $(ReposBaseDir)Grasshopper_UI\Build\BH.UI.Grasshopper.dll GrasshopperPlugin\" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist GrasshopperPlugin\BH.UI.Grasshopper.dll move /Y GrasshopperPlugin\BH.UI.Grasshopper.dll GrasshopperPlugin\BH.UI.Grasshopper.gha" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Grasshopper_UI\Build\*.gha xcopy /Y /I /E $(ReposBaseDir)Grasshopper_UI\Build\*.gha GrasshopperPlugin" />
 
     <!-- Revit Addins -->
     <Exec WorkingDirectory="$(ProjectDir)" Command="if exist $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin xcopy /Y $(ReposBaseDir)Revit_Toolkit\Revit_Core_Adapter\Listener\Files\BHoM_2022.Addin Revit\2022" />

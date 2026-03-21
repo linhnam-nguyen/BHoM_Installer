@@ -13,6 +13,7 @@ $adapterCores = Get-Content (Join-Path $installerPath "adapterCore.txt")
 $uiCores      = Get-Content (Join-Path $installerPath "uiCore.txt")
 $dependencies = Get-Content (Join-Path $installerPath "dependencies.txt")
 $includes     = Get-Content (Join-Path $installerPath "include.txt")
+$alphaIncludes= Get-Content (Join-Path $installerPath "alphaIncludes.txt")
 $uis          = Get-Content (Join-Path $installerPath "userInterfaces.txt")
 $altconfigs   = Get-Content (Join-Path $installerPath "altConfigs.txt")
 
@@ -98,6 +99,12 @@ ForEach ($line in $dependencies) {
 # **** Iterate over all Toolkits to Include ****
 Write-Output ("**** ITERATING OVER ALL TOOLKITS TO INCLUDE ****")
 ForEach ($line in $includes) {
+  Process-RepoLine -line $line -shouldBuild $true
+}
+
+# **** Iterate over all alpha Toolkits to Include ****
+Write-Output ("**** ITERATING OVER ALL TOOLKITS TO INCLUDE ****")
+ForEach ($line in $alphaIncludes) {
   Process-RepoLine -line $line -shouldBuild $true
 }
 
